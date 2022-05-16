@@ -3,18 +3,19 @@ package com.lin.nls_export.controller
 import com.lin.nls_export.entities.SettingBean
 import com.lin.nls_export.ext.disableEdit
 import com.lin.nls_export.ext.enableEdit
+import com.lin.nls_export.utils.AlertUtil
+import com.lin.nls_export.utils.SettingsUtil
+import com.lin.nls_export.utils.getAbsoluteX
+import com.lin.nls_export.utils.getAbsoluteY
 import javafx.application.Platform
 import javafx.beans.value.ChangeListener
-import javafx.event.EventHandler
 import javafx.fxml.FXML
 import javafx.scene.control.*
 import javafx.scene.image.ImageView
 import javafx.scene.input.DragEvent
 import javafx.scene.input.TransferMode
-import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Pane
-import javafx.scene.paint.Color
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
 import java.io.File
@@ -96,7 +97,7 @@ class NlsExportPaneController {
         dragEvent.dragboard.let {
             if (it.hasFiles()) {
                 val file = it.files[0]
-                if (file.isFile && file.extension.let { it == "xls" || it == "xlsx"}) {
+                if (file.isFile && file.extension.let { it == "xls" || it == "xlsx" }) {
                     tfExcelFile.text = file.absolutePath
                     setOutputName(file)
                 }
@@ -147,7 +148,6 @@ class NlsExportPaneController {
         tgSheetSetting = ToggleGroup()
         bindToggleGroupAndItsChildren(tgSheetSetting, rbSheetSetting0, rbSheetSetting1, rbSheetSetting2)
         allSheetSettingRadioBtns = listOf(rbSheetSetting0, rbSheetSetting1, rbSheetSetting2)
-        allSheetSettingRadioBtns.getOrNull(settingBean.sheetSetting)?.isSelected = true
         // 读取所有 sheet 时不需要输入
         rbSheetSetting0.selectedProperty().addListener { _, _, selected ->
             if (selected) {
@@ -156,9 +156,24 @@ class NlsExportPaneController {
                 taSheetName.disableEdit()
             }
         }
-        taSheetName.text = settingBean.sheetControlInput
         taSheetName.textProperty().addListener(taSheetNameChangedListener)
 
+        // 输出路径不允许编辑
+        tfOutputDirectory.disableEdit()
+        cbUsingPathAsOutputName.selectedProperty().addListener { _, _, selected ->
+            if (selected) {
+                tfOutputDirectory.text = tfExcelFile.text?.takeIf { it.isNotEmpty() }?.let { File(it).parent }
+            }
+        }
+
+        loadSettings(settingBean)
+
+        initSettingMenu()
+    }
+
+    private fun loadSettings(settingBean: SettingBean) {
+        allSheetSettingRadioBtns.getOrNull(settingBean.sheetSetting)?.isSelected = true
+        taSheetName.text = settingBean.sheetControlInput
         settingBean.keyColumnSetting.run {
             keyColumnNameSettingController.let {
                 it.setLabel("Key:")
@@ -195,18 +210,9 @@ class NlsExportPaneController {
                 it.isReadCheckBox(isRead == true)
             }
         }
-
         cbRemoveIllegalKeyLine.isSelected = settingBean.removeIllegalKeyLine
         cbTrimValue.isSelected = settingBean.trimValue
-
-        // 输出路径不允许编辑
-        tfOutputDirectory.disableEdit()
         cbUsingPathAsOutputName.isSelected = settingBean.usingPathAsOutputName
-        cbUsingPathAsOutputName.selectedProperty().addListener { _, _, selected ->
-            if (selected) {
-                tfOutputDirectory.text = tfExcelFile.text?.takeIf { it.isNotEmpty() }?.let { File(it).parent }
-            }
-        }
     }
 
     /**
@@ -407,7 +413,8 @@ class NlsExportPaneController {
             tfOutputDirectory.text = name
         }
     }
-//
+
+    //
 //    private fun mergeImage(bean: ImageMergePropertiesBean) {
 //        val thread = Thread {
 //            try {
@@ -473,87 +480,75 @@ class NlsExportPaneController {
 //        }
 //    }
 //
-//    private fun initSettingMenu() {
-//        val saveItem = MenuItem("保存")
-//        val resetItem = MenuItem("重置")
-//
-//        val contextMenu = ContextMenu()
-//        contextMenu.items.addAll(saveItem, resetItem)
-//
-//        saveItem.setOnAction {
-//            // 保存最新设置项
-//            SettingsUtil.saveSetting(getLatestSettingBean())
-//            showInformation("设置信息已保存，保存路径 ${SettingsUtil.getSettingFilePath()}")
-//        }
-//
-//        resetItem.setOnAction {
-//            // 重置选项
-//            setDefaultSelectedItems(SettingsUtil.getDefaultSetting())
-//            // 删除旧文件
-//            SettingsUtil.deleteExistingSetting()
-//            showInformation("设置信息已重置，设置文件已删除!")
-//        }
-//
-//        ivSetting.setOnMouseClicked {
-//            contextMenu.hide()
-//
-//            // 显示位置在 ivSetting 的正中央
-//            val showX = ivSetting.getAbsoluteX() + ivSetting.fitWidth / 2
-//            val showY = ivSetting.getAbsoluteY() + ivSetting.fitHeight / 2
-//
-//            contextMenu.show(ivSetting, showX, showY)
-//        }
-//    }
-//
-//    /**
-//     * 操作完毕后，提示
-//     */
-//    private fun showInformation(message: String) {
-//        Platform.runLater {
-//            AlertUtil.newInstance(
-//                    alertType = Alert.AlertType.INFORMATION,
-//                    title = "操作成功",
-//                    contentText = message
-//            )
-//        }
-//    }
-//
-//    /**
-//     * 获取并封装setting 信息
-//     */
-//    private fun getLatestSettingBean(): SettingBean {
-//        // image format 所有被选中的 items
-//        val imageFormatIndexes = imageFormatCbList.mapIndexedNotNull { index, item ->
-//            index.takeIf { item.isSelected }
-//        }
-//
-//        val imageMarginIndex: Int = imageMarginRbList.indexOf(tgImageMargin.selectedToggle)
-//        var imageMarginValue: Int? = null
-//        if (imageMarginIndex == imageMarginRbList.size - 1) {
-//            imageMarginValue = tryCatchAllExceptions({ tfImageMarginCustomize.text?.toInt() })
-//        }
-//
-//        val eachLineNumIndex: Int = eachLineRbList.indexOf(tgEachLine.selectedToggle)
-//        var eachLineNumValue: Int? = null
-//        if (eachLineNumIndex == eachLineRbList.size - 1) {
-//            eachLineNumValue = tryCatchAllExceptions({ tfEachLineCustomize.text?.toInt() })
-//        }
-//
-//        val mergeQualityIndex: Int = imageQualityRbList.indexOf(tgImageQuality.selectedToggle)
-//
-//        val arrangeModeIndex: Int = arrangeModeRbList.indexOf(tgArrangeMode.selectedToggle)
-//
-//        val usingPathAsOutputName = cbUsingPathAsOutputName.isSelected
-//
-//        return SettingBean(
-//                imageFormatIndexes = imageFormatIndexes,
-//                imageMarginIndex = imageMarginIndex,
-//                imageMarginValue = imageMarginValue,
-//                eachLineNumIndex = eachLineNumIndex,
-//                eachLineNumValue = eachLineNumValue,
-//                mergeQualityIndex = mergeQualityIndex,
-//                arrangeModeIndex = arrangeModeIndex,
-//                usingPathAsOutputName = usingPathAsOutputName
-//        )
-//    }
+    private fun initSettingMenu() {
+        val saveItem = MenuItem("保存")
+        val resetItem = MenuItem("重置")
+
+        val contextMenu = ContextMenu()
+        contextMenu.items.addAll(saveItem, resetItem)
+
+        saveItem.setOnAction {
+            // 保存最新设置项
+            SettingsUtil.saveSetting(getLatestSettingBean())
+            showInformation("设置信息已保存，保存路径 ${SettingsUtil.getSettingFilePath()}")
+        }
+
+        resetItem.setOnAction {
+            // 重置选项
+            loadSettings(SettingsUtil.getDefaultSetting())
+            // 删除旧文件
+            SettingsUtil.deleteExistingSetting()
+            showInformation("设置信息已重置，设置文件已删除!")
+        }
+
+        ivSetting.setOnMouseClicked {
+            contextMenu.hide()
+
+            // 显示位置在 ivSetting 的正中央
+            val showX = ivSetting.getAbsoluteX() + ivSetting.fitWidth / 2
+            val showY = ivSetting.getAbsoluteY() + ivSetting.fitHeight / 2
+
+            contextMenu.show(ivSetting, showX, showY)
+        }
+    }
+
+    /**
+     * 操作完毕后，提示
+     */
+    private fun showInformation(message: String) {
+        Platform.runLater {
+            AlertUtil.newInstance(
+                    alertType = Alert.AlertType.INFORMATION,
+                    title = "操作成功",
+                    contentText = message
+            )
+        }
+    }
+
+    /**
+     * 获取并封装setting 信息
+     */
+    private fun getLatestSettingBean(): SettingBean {
+        val sheetSetting = allSheetSettingRadioBtns.indexOf(tgSheetSetting.selectedToggle)
+        val sheetControlInput = taSheetName.text.orEmpty()
+        val keyColumnSetting = keyColumnNameSettingController.getNlsColumnInputBean()
+        val enColumnSetting = enColumnNameSettingController.getNlsColumnInputBean()
+        val scColumnSetting = scColumnNameSettingController.getNlsColumnInputBean()
+        val tcColumnSetting = tcColumnNameSettingController.getNlsColumnInputBean()
+        val removeIllegalKeyLine = cbRemoveIllegalKeyLine.isSelected
+        val trimValue = cbTrimValue.isSelected
+        val usingPathAsOutputName = cbUsingPathAsOutputName.isSelected
+
+        return SettingBean(
+                sheetSetting = sheetSetting,
+                sheetControlInput = sheetControlInput,
+                keyColumnSetting = keyColumnSetting,
+                enColumnSetting = enColumnSetting,
+                scColumnSetting = scColumnSetting,
+                tcColumnSetting = tcColumnSetting,
+                removeIllegalKeyLine = removeIllegalKeyLine,
+                trimValue = trimValue,
+                usingPathAsOutputName = usingPathAsOutputName
+        )
+    }
 }
