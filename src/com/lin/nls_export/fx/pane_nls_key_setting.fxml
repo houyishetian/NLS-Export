@@ -14,7 +14,7 @@
             <Font size="13.0" />
          </font>
          <BorderPane.margin>
-            <Insets top="15.0" />
+            <Insets top="10.0" />
          </BorderPane.margin>
       </Label>
    </left>
@@ -24,13 +24,13 @@
             <Font size="13.0" />
          </font>
          <BorderPane.margin>
-            <Insets top="15.0" />
+            <Insets top="10.0" />
          </BorderPane.margin></CheckBox>
    </right>
    <bottom>
       <TextField fx:id="textFieldForColumnName" promptText="输入该属性在表格中的 column name" BorderPane.alignment="CENTER">
          <BorderPane.margin>
-            <Insets top="8.0" />
+            <Insets top="3.0" />
          </BorderPane.margin>
          <font>
             <Font size="13.0" />

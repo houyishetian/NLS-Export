@@ -42,7 +42,7 @@
                     </HBox.margin>
                 </TextField>
 
-                <Button fx:id="btnSelectExcelFile" onAction="#onSelectPathClicked" text="浏览">
+                <Button fx:id="btnSelectExcelFile" onAction="#onSelectExcelClicked" text="浏览">
                     <font>
                         <Font size="13.0"/>
                     </font>
@@ -123,7 +123,7 @@
                     <Insets top="15.0"/>
                 </VBox.margin>
             </GridPane>
-            <TextArea maxHeight="80.0" minHeight="80.0" prefHeight="80.0" prefWidth="200.0"
+            <TextArea fx:id="taSheetName" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" prefWidth="200.0"
                       promptText="输入需要控制的 sheet name，如果有多个，以 / 分隔" wrapText="true">
                 <VBox.margin>
                     <Insets top="20.0"/>
@@ -162,7 +162,7 @@
                         <Font name="System Bold" size="13.0"/>
                     </font>
                 </Label>
-                <TextField fx:id="tfOutputName" focusTraversable="false" promptText="20位文件名，汉字数字字母下划线组成"
+                <TextField fx:id="tfOutputDirectory" focusTraversable="false" promptText="20位文件名，汉字数字字母下划线组成"
                            HBox.hgrow="ALWAYS">
                     <font>
                         <Font size="13.0"/>
@@ -171,7 +171,8 @@
                         <Insets left="10.0"/>
                     </HBox.margin>
                 </TextField>
-                <Button fx:id="btnSelectOutputDirectory" mnemonicParsing="false" text="浏览">
+                <Button fx:id="btnSelectOutputDirectory" mnemonicParsing="false" onAction="#onSelectOutputPathClicked"
+                        text="浏览">
                     <HBox.margin>
                         <Insets left="20.0"/>
                     </HBox.margin>
@@ -218,8 +219,7 @@
     </HBox>
 
     <Button fx:id="btnStartHandle" maxHeight="50.0" maxWidth="900.0" minHeight="50.0" minWidth="900.0"
-            mnemonicParsing="false" onAction="#startMerge" prefHeight="50.0" prefWidth="900.0" text="开始处理"
-            VBox.vgrow="ALWAYS">
+            mnemonicParsing="false" prefHeight="50.0" prefWidth="900.0" text="开始处理" VBox.vgrow="ALWAYS">
         <font>
             <Font name="System Bold" size="16.0"/>
         </font>
