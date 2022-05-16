@@ -1,5 +1,8 @@
 package com.lin.nls_export.controller
 
+import com.lin.nls_export.entities.NlsColumnInputBean
+import com.lin.nls_export.ext.disableEdit
+import com.lin.nls_export.ext.enableEdit
 import javafx.fxml.FXML
 import javafx.scene.control.CheckBox
 import javafx.scene.control.Label
@@ -15,20 +18,22 @@ class NlsKeySettingPaneController {
     @FXML
     lateinit var textFieldForColumnName: TextField // 该字段在 excel 中的名字
 
-    init {
-//        cbIsRead.selectedProperty().addListener { _, _, isSelected ->
-//            if (isSelected) {
-//                textFieldForColumnName.isEditable = true
-//                textFieldForColumnName.isMouseTransparent = false
-//            } else {
-//                textFieldForColumnName.isEditable = false
-//                textFieldForColumnName.isMouseTransparent = true
-//            }
-//        }
-    }
-
     fun showIsReadCheckbox(show: Boolean) {
         cbIsRead.visibleProperty().value = show
+
+        if (show) {
+            cbIsRead.selectedProperty().addListener { _, _, isSelected ->
+                if (isSelected) {
+                    textFieldForColumnName.enableEdit()
+                } else {
+                    textFieldForColumnName.disableEdit()
+                }
+            }
+        }
+    }
+
+    fun isReadCheckBox(isRead: Boolean) {
+        cbIsRead.isSelected = isRead
     }
 
     fun setLabel(label: String) {
@@ -39,7 +44,14 @@ class NlsKeySettingPaneController {
         textFieldForColumnName.promptText = hint
     }
 
-    fun getInputColumnName(): String? {
-        return takeIf { cbIsRead.isSelected }?.let { textFieldForColumnName.text }
+    fun setInputColumnName(columnName: String) {
+        textFieldForColumnName.text = columnName
+    }
+
+    fun getNlsColumnInputBean(): NlsColumnInputBean {
+        return NlsColumnInputBean(
+                columnName = textFieldForColumnName.text.orEmpty(),
+                isRead = cbIsRead.takeIf { it.visibleProperty().value }?.isSelected
+        )
     }
 }

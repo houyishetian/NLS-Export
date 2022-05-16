@@ -2,6 +2,7 @@ package com.lin.nls_export.entrance
 
 import com.lin.nls_export.controller.NlsExportPaneController
 import com.lin.nls_export.utils.AlertUtil
+import com.lin.nls_export.utils.SettingsUtil
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.fxml.FXMLLoader
@@ -31,7 +32,7 @@ class FXEntrance : Application() {
 
             controller.pane = pane
             // 设置默认值，如果有以前保存的，取出；如果没有，使用默认值
-//            controller.initVaribles(SettingsUtil.getSetting() ?: SettingsUtil.getDefaultSetting())
+            controller.initVaribles(SettingsUtil.getSetting() ?: SettingsUtil.getDefaultSetting())
 
             val scene = Scene(pane, screenWidth, screenHeight)
 

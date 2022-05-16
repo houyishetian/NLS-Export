@@ -4,37 +4,28 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane minWidth="250.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lin.nls_export.controller.NlsKeySettingPaneController">
-   <left>
-      <Label fx:id="labelHandleName" text="Key:" BorderPane.alignment="CENTER">
+<HBox alignment="CENTER_LEFT" minWidth="270.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lin.nls_export.controller.NlsKeySettingPaneController">
+   <children>
+      <Label fx:id="labelHandleName" maxWidth="60.0" minWidth="60.0" prefWidth="50.0" text="Key:">
          <font>
             <Font size="13.0" />
          </font>
-         <BorderPane.margin>
+         <HBox.margin>
             <Insets top="10.0" />
-         </BorderPane.margin>
+         </HBox.margin>
       </Label>
-   </left>
-   <right>
-      <CheckBox fx:id="cbIsRead" mnemonicParsing="false" text="读取" BorderPane.alignment="CENTER">
-         <font>
-            <Font size="13.0" />
-         </font>
-         <BorderPane.margin>
-            <Insets top="10.0" />
-         </BorderPane.margin></CheckBox>
-   </right>
-   <bottom>
-      <TextField fx:id="textFieldForColumnName" promptText="输入该属性在表格中的 column name" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets top="3.0" />
-         </BorderPane.margin>
-         <font>
-            <Font size="13.0" />
-         </font>
+      <TextField fx:id="textFieldForColumnName" promptText="输入该属性在单元格中的名字" HBox.hgrow="ALWAYS">
+         <HBox.margin>
+            <Insets left="10.0" top="10.0" />
+         </HBox.margin>
       </TextField>
-   </bottom>
-</BorderPane>
+      <CheckBox fx:id="cbIsRead" mnemonicParsing="false" text="读取">
+         <HBox.margin>
+            <Insets left="10.0" top="10.0" />
+         </HBox.margin>
+      </CheckBox>
+   </children>
+</HBox>

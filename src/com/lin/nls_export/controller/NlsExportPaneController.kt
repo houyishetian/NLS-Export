@@ -1,5 +1,8 @@
 package com.lin.nls_export.controller
 
+import com.lin.nls_export.entities.SettingBean
+import com.lin.nls_export.ext.disableEdit
+import com.lin.nls_export.ext.enableEdit
 import javafx.application.Platform
 import javafx.beans.value.ChangeListener
 import javafx.event.EventHandler
@@ -9,6 +12,7 @@ import javafx.scene.image.ImageView
 import javafx.scene.input.DragEvent
 import javafx.scene.input.TransferMode
 import javafx.scene.layout.BorderPane
+import javafx.scene.layout.HBox
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.stage.DirectoryChooser
@@ -34,18 +38,22 @@ class NlsExportPaneController {
     @FXML
     lateinit var rbSheetSetting2: RadioButton
     private lateinit var tgSheetSetting: ToggleGroup
+    private lateinit var allSheetSettingRadioBtns: List<RadioButton>
     @FXML
     lateinit var taSheetName: TextArea
+    private val taSheetNameChangedListener: ChangeListener<String> by lazy {
+        createTextFieldListener(taSheetName, "[a-zA-Z0-9 _/]{0,30}")
+    }
 
     // key/en/sc/tc 的相关设置
     @FXML
-    lateinit var keyColumnNameSetting: BorderPane
+    lateinit var keyColumnNameSetting: HBox
     @FXML
-    lateinit var enColumnNameSetting: BorderPane
+    lateinit var enColumnNameSetting: HBox
     @FXML
-    lateinit var scColumnNameSetting: BorderPane
+    lateinit var scColumnNameSetting: HBox
     @FXML
-    lateinit var tcColumnNameSetting: BorderPane
+    lateinit var tcColumnNameSetting: HBox
     @FXML
     lateinit var keyColumnNameSettingController: NlsKeySettingPaneController
     @FXML
@@ -88,7 +96,7 @@ class NlsExportPaneController {
         dragEvent.dragboard.let {
             if (it.hasFiles()) {
                 val file = it.files[0]
-                if (file.isDirectory) {
+                if (file.isFile && file.extension.let { it == "xls" || it == "xlsx"}) {
                     tfExcelFile.text = file.absolutePath
                     setOutputName(file)
                 }
@@ -110,7 +118,7 @@ class NlsExportPaneController {
 
     fun onSelectOutputPathClicked() {
         val directoryChooser = DirectoryChooser()
-        directoryChooser.title = "请选择图片所在文件夹"
+        directoryChooser.title = "请选择导出文件夹"
         val directory = directoryChooser.showDialog(btnSelectOutputDirectory.scene.window)
         tfOutputDirectory.text = directory.absolutePath
         setOutputName(directory)
@@ -135,56 +143,82 @@ class NlsExportPaneController {
 //        }
 //    }
 
-//    fun initVaribles(defaultSettingBean: SettingBean) {
-//        tgImageMargin = ToggleGroup()
-//        bindToggleGroupAndItsChildren(tgImageMargin, rbImageMargin10, rbImageMargin30, rbImageMargin50, rbImageMargin70, rbImageMarginCustomize)
-//        bindCustomizedRadioBtnAndTextField(rbImageMarginCustomize, tfImageMarginCustomize)
-//        bindTextFieldListener(tfImageMarginCustomize, imageMarginCustomizeChangedListener)
-//
-//        tgEachLine = ToggleGroup()
-//        bindToggleGroupAndItsChildren(tgEachLine, rbEachLine1, rbEachLine3, rbEachLine5, rbEachLineCustomize)
-//        bindCustomizedRadioBtnAndTextField(rbEachLineCustomize, tfEachLineCustomize)
-//        bindTextFieldListener(tfEachLineCustomize, eachLineCustomizeChangedListener)
-//
-//        tgImageQuality = ToggleGroup()
-//        bindToggleGroupAndItsChildren(tgImageQuality, rbImageQualityHigh, rbImageQualityMiddle, rbImageQualityNormal, rbImageQualityLow)
-//
-//        tgArrangeMode = ToggleGroup()
-//        bindToggleGroupAndItsChildren(tgArrangeMode, rbArrangeModeForm, rbArrangeModeSize)
-//
-//        setOutputNameTextFieldListener(outputNameChangedListener)
-//
-//        // 设置默认选中 item
-//        setDefaultSelectedItems(defaultSettingBean)
-//
-//        initSettingMenu()
-//    }
-//
-//    /**
-//     * 将 toggle group 和其 child Radio button 绑定起来
-//     */
-//    private fun bindToggleGroupAndItsChildren(toggleGroup: ToggleGroup, vararg radioButtons: RadioButton) {
-//        radioButtons.forEach {
-//            it.toggleGroup = toggleGroup
-//        }
-//    }
-//
-//    /**
-//     * 将 customize radio button 和 后边的 customize text field 绑定起来
-//     */
-//    private fun bindCustomizedRadioBtnAndTextField(radioBtn: RadioButton, textField: TextField) {
-//        radioBtn.selectedProperty().addListener { _, _, selected ->
-//            if (selected) {
-//                textField.isEditable = true
-//                textField.isMouseTransparent = false
-//            } else {
-//                textField.isEditable = false
-//                textField.isMouseTransparent = true
-//                textField.text = ""
-//            }
-//        }
-//    }
-//
+    fun initVaribles(settingBean: SettingBean) {
+        tgSheetSetting = ToggleGroup()
+        bindToggleGroupAndItsChildren(tgSheetSetting, rbSheetSetting0, rbSheetSetting1, rbSheetSetting2)
+        allSheetSettingRadioBtns = listOf(rbSheetSetting0, rbSheetSetting1, rbSheetSetting2)
+        allSheetSettingRadioBtns.getOrNull(settingBean.sheetSetting)?.isSelected = true
+        // 读取所有 sheet 时不需要输入
+        rbSheetSetting0.selectedProperty().addListener { _, _, selected ->
+            if (selected) {
+                taSheetName.enableEdit()
+            } else {
+                taSheetName.disableEdit()
+            }
+        }
+        taSheetName.text = settingBean.sheetControlInput
+        taSheetName.textProperty().addListener(taSheetNameChangedListener)
+
+        settingBean.keyColumnSetting.run {
+            keyColumnNameSettingController.let {
+                it.setLabel("Key:")
+                it.setInputHint("请输入Key所在列名")
+                it.setInputColumnName(columnName)
+                it.showIsReadCheckbox(false)
+            }
+        }
+
+        settingBean.enColumnSetting.run {
+            enColumnNameSettingController.let {
+                it.setLabel("英文:")
+                it.setInputHint("请输入英文所在列名")
+                it.setInputColumnName(columnName)
+                it.showIsReadCheckbox(true)
+                it.isReadCheckBox(isRead == true)
+            }
+        }
+        settingBean.scColumnSetting.run {
+            scColumnNameSettingController.let {
+                it.setLabel("简体中文:")
+                it.setInputHint("请输入简体中文所在列名")
+                it.setInputColumnName(columnName)
+                it.showIsReadCheckbox(true)
+                it.isReadCheckBox(isRead == true)
+            }
+        }
+        settingBean.tcColumnSetting.run {
+            tcColumnNameSettingController.let {
+                it.setLabel("繁体中文:")
+                it.setInputHint("请输入繁体中文所在列名")
+                it.setInputColumnName(columnName)
+                it.showIsReadCheckbox(true)
+                it.isReadCheckBox(isRead == true)
+            }
+        }
+
+        cbRemoveIllegalKeyLine.isSelected = settingBean.removeIllegalKeyLine
+        cbTrimValue.isSelected = settingBean.trimValue
+
+        // 输出路径不允许编辑
+        tfOutputDirectory.disableEdit()
+        cbUsingPathAsOutputName.isSelected = settingBean.usingPathAsOutputName
+        cbUsingPathAsOutputName.selectedProperty().addListener { _, _, selected ->
+            if (selected) {
+                tfOutputDirectory.text = tfExcelFile.text?.takeIf { it.isNotEmpty() }?.let { File(it).parent }
+            }
+        }
+    }
+
+    /**
+     * 将 toggle group 和其 child Radio button 绑定起来
+     */
+    private fun bindToggleGroupAndItsChildren(toggleGroup: ToggleGroup, vararg radioButtons: RadioButton) {
+        radioButtons.forEach {
+            it.toggleGroup = toggleGroup
+        }
+    }
+
+    //
 //    /**
 //     * 设置 output name 和 checkbox 之间的绑定关系
 //     */
@@ -215,19 +249,20 @@ class NlsExportPaneController {
 //        }
 //    }
 //
-//    private fun createTextFieldListener(textField: TextField, regex: String): ChangeListener<String> {
-//        return ChangeListener { _, old, new ->
-//            // 允许清空
-//            if (new.isNotEmpty()) {
-//                // 如果不为空，就必须符合要求
-//                val matchRegex = new.matches(Regex(regex))
-//                if (!matchRegex) {
-//                    textField.text = old
-//                }
-//            }
-//        }
-//    }
-//
+    private fun createTextFieldListener(textField: TextInputControl, regex: String): ChangeListener<String> {
+        return ChangeListener { _, old, new ->
+            // 允许清空
+            if (new.isNotEmpty()) {
+                // 如果不为空，就必须符合要求
+                val matchRegex = new.matches(Regex(regex))
+                if (!matchRegex) {
+                    textField.text = old
+                }
+            }
+        }
+    }
+
+    //
 //    private fun bindTextFieldListener(textField: TextField, changeListener: ChangeListener<String>) {
 //        textField.textProperty().addListener(changeListener)
 //    }
