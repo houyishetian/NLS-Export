@@ -22,14 +22,13 @@ class ReadExcelUtil(private val filePath: String,
     private val workBook: Workbook
 
     init {
-        workBook = File(filePath).takeIf { it.exists() && it.isFile }?.let {
-            it.inputStream().run {
-                val result = when (it.extension) {
-                    "xls" -> HSSFWorkbook(this)
-                    "xlsx" -> XSSFWorkbook(this)
+        workBook = File(filePath).takeIf { it.exists() && it.isFile }?.let { file ->
+            file.inputStream().use {
+                val result = when (file.extension) {
+                    "xls" -> HSSFWorkbook(it)
+                    "xlsx" -> XSSFWorkbook(it)
                     else -> throw IllegalArgumentException("$filePath 不是 xls/xlsx 文件!")
                 }
-                this.close()
                 result
             }
         } ?: throw IllegalArgumentException("$filePath 不存在或不是文件!")
