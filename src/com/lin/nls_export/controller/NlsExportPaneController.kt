@@ -179,7 +179,8 @@ class NlsExportPaneController {
                 it.setLabel("Key:")
                 it.setInputHint("请输入Key所在列名")
                 it.setInputColumnName(columnName)
-                it.showIsReadCheckbox(false)
+                it.showIsReadCheckbox(true)
+                it.isReadCheckBox(isRead)
             }
         }
 
@@ -189,7 +190,7 @@ class NlsExportPaneController {
                 it.setInputHint("请输入英文所在列名")
                 it.setInputColumnName(columnName)
                 it.showIsReadCheckbox(true)
-                it.isReadCheckBox(isRead == true)
+                it.isReadCheckBox(isRead)
             }
         }
         settingBean.scColumnSetting.run {
@@ -198,7 +199,7 @@ class NlsExportPaneController {
                 it.setInputHint("请输入简体中文所在列名")
                 it.setInputColumnName(columnName)
                 it.showIsReadCheckbox(true)
-                it.isReadCheckBox(isRead == true)
+                it.isReadCheckBox(isRead)
             }
         }
         settingBean.tcColumnSetting.run {
@@ -207,7 +208,7 @@ class NlsExportPaneController {
                 it.setInputHint("请输入繁体中文所在列名")
                 it.setInputColumnName(columnName)
                 it.showIsReadCheckbox(true)
-                it.isReadCheckBox(isRead == true)
+                it.isReadCheckBox(isRead)
             }
         }
         cbRemoveIllegalKeyLine.isSelected = settingBean.removeIllegalKeyLine

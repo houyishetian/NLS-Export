@@ -51,7 +51,7 @@ class NlsKeySettingPaneController {
     fun getNlsColumnInputBean(): NlsColumnInputBean {
         return NlsColumnInputBean(
                 columnName = textFieldForColumnName.text.orEmpty(),
-                isRead = cbIsRead.takeIf { it.visibleProperty().value }?.isSelected
+                isRead = cbIsRead.isSelected
         )
     }
 }

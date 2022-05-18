@@ -52,7 +52,7 @@ object SettingsUtil {
         return SettingBean(
                 sheetSetting = 0,
                 sheetControlInput = "",
-                keyColumnSetting = NlsColumnInputBean("Key", null),
+                keyColumnSetting = NlsColumnInputBean("Key", true),
                 enColumnSetting = NlsColumnInputBean("English", true),
                 scColumnSetting = NlsColumnInputBean("Simple Chinese", true),
                 tcColumnSetting = NlsColumnInputBean("Tradional Chinese", true),

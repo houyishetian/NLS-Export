@@ -16,5 +16,5 @@ class SettingBean(
 
 class NlsColumnInputBean(
         val columnName: String,
-        val isRead: Boolean?
+        val isRead: Boolean
 ) : Serializable
