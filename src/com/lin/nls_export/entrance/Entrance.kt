@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
 
     val util = ReadExcelUtil(path, filter, keyColumn, enColumn, scColumn, tcColumn)
 
-    util.read().forEach {
+    util.read().filter { it.key.isBlank().not() }.forEach {
         println(it)
     }
 }

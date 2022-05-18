@@ -139,13 +139,13 @@ class ReadExcelUtil(private val filePath: String,
                     it.getRow(rowIndex)?.let { row ->
                         // 读取当前行
                         // key
-                        val key = safeIndexes.keyIndex.takeIf { it > -1 }?.let { getCellValue(row.getCell(it)) }
+                        val key = safeIndexes.keyIndex.takeIf { it > -1 }?.let { getCellValue(row.getCell(it)) }.orEmpty()
                         // en
-                        val en = safeIndexes.enIndex.takeIf { it > -1 }?.let { getCellValue(row.getCell(it)) }
+                        val en = safeIndexes.enIndex.takeIf { it > -1 }?.let { getCellValue(row.getCell(it)) }.orEmpty()
                         // sc
-                        val sc = safeIndexes.scIndex.takeIf { it > -1 }?.let { getCellValue(row.getCell(it)) }
+                        val sc = safeIndexes.scIndex.takeIf { it > -1 }?.let { getCellValue(row.getCell(it)) }.orEmpty()
                         // tc
-                        val tc = safeIndexes.tcIndex.takeIf { it > -1 }?.let { getCellValue(row.getCell(it)) }
+                        val tc = safeIndexes.tcIndex.takeIf { it > -1 }?.let { getCellValue(row.getCell(it)) }.orEmpty()
                         result.add(NlsItemBean(key, en, sc, tc))
                     }
                 }
