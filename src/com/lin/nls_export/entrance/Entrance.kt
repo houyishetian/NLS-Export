@@ -1,5 +1,9 @@
 package com.lin.nls_export.entrance
 
+import com.lin.nls_export.constant.EN_FILE_NAME
+import com.lin.nls_export.constant.NLS_ITEM
+import com.lin.nls_export.constant.SC_FILE_NAME
+import com.lin.nls_export.constant.TC_FILE_NAME
 import com.lin.nls_export.entities.NlsItemBean
 import com.lin.nls_export.entities.SheetNameFilter
 import com.lin.nls_export.utils.CellInterceptorUtil
@@ -22,38 +26,42 @@ fun List<NlsItemBean>.exportNlsDoc(exportPath: String,
         this.forEach {
             val usedKey = if (exportKey) it.key else ""
             if (exportKey) {
-                keyString.append("<string name=\"$usedKey\"></string>").append("\n")
+                // 只导出 key，value 为 ""
+                keyString.append(String.format(NLS_ITEM, usedKey, "")).append("\n")
             }
             if (exportEn) {
-                enString.append("<string name=\"$usedKey\">${it.en}</string>").append("\n")
+                // 导出简体英文
+                keyString.append(String.format(NLS_ITEM, usedKey, it.en)).append("\n")
             }
             if (exportSc) {
-                scString.append("<string name=\"$usedKey\">${it.sc}</string>").append("\n")
+                // 导出中文
+                keyString.append(String.format(NLS_ITEM, usedKey, it.sc)).append("\n")
             }
             if (exportTc) {
-                tcString.append("<string name=\"$usedKey\">${it.tc}</string>").append("\n")
+                // 导出繁体中文
+                keyString.append(String.format(NLS_ITEM, usedKey, it.tc)).append("\n")
             }
         }
 
         if (exportKey && listOf(exportEn, exportSc, exportTc).contains(true).not()) {
             // 如果只导出key，就需要生成一个 strings 文件即可
-            val enFile = File(exportPath, "strings.xml")
+            val enFile = File(exportPath, EN_FILE_NAME)
             enFile.writeText(keyString.toString())
         } else {
             // 不然导出其他任何语言都有对应的文件
             if (exportEn) {
                 // 如果没有读取到任何value，则会有一个空文件生成
-                val enFile = File(exportPath, "strings.xml")
+                val enFile = File(exportPath, EN_FILE_NAME)
                 enFile.writeText(enString.toString())
             }
             if (exportSc) {
                 // 如果没有读取到任何value，则会有一个空文件生成
-                val scFile = File(exportPath, "strings_CN.xml")
+                val scFile = File(exportPath, SC_FILE_NAME)
                 scFile.writeText(scString.toString())
             }
             if (exportTc) {
                 // 如果没有读取到任何value，则会有一个空文件生成
-                val tcFile = File(exportPath, "strings_TW.xml")
+                val tcFile = File(exportPath, TC_FILE_NAME)
                 tcFile.writeText(tcString.toString())
             }
         }
