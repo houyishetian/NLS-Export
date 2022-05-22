@@ -31,15 +31,15 @@ fun List<NlsItemBean>.exportNlsDoc(exportPath: String,
             }
             if (exportEn) {
                 // 导出简体英文
-                keyString.append(String.format(NLS_ITEM, usedKey, it.en)).append("\n")
+                enString.append(String.format(NLS_ITEM, usedKey, it.en)).append("\n")
             }
             if (exportSc) {
                 // 导出中文
-                keyString.append(String.format(NLS_ITEM, usedKey, it.sc)).append("\n")
+                scString.append(String.format(NLS_ITEM, usedKey, it.sc)).append("\n")
             }
             if (exportTc) {
                 // 导出繁体中文
-                keyString.append(String.format(NLS_ITEM, usedKey, it.tc)).append("\n")
+                tcString.append(String.format(NLS_ITEM, usedKey, it.tc)).append("\n")
             }
         }
 
