@@ -150,7 +150,7 @@
                         <Font name="System Bold" size="13.0" />
                     </font>
                 </Label>
-                <TextField fx:id="tfOutputDirectory" focusTraversable="false" promptText="20位文件名，汉字数字字母下划线组成" HBox.hgrow="ALWAYS">
+                <TextField fx:id="tfOutputDirectory" editable="false" focusTraversable="false" mouseTransparent="true" promptText="20位文件名，汉字数字字母下划线组成" HBox.hgrow="ALWAYS">
                     <font>
                         <Font size="13.0" />
                     </font>
@@ -167,14 +167,6 @@
                     </font>
                 </Button>
             </HBox>
-            <CheckBox fx:id="cbUsingPathAsOutputName" mnemonicParsing="false" text="使用 excel 所在路径">
-                <VBox.margin>
-                    <Insets left="70.0" top="5.0" />
-                </VBox.margin>
-                <font>
-                    <Font size="13.0" />
-                </font>
-            </CheckBox>
             <HBox maxHeight="80.0" minHeight="80.0" prefHeight="80.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                 <VBox.margin>
                     <Insets top="15.0" />

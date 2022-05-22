@@ -76,8 +76,6 @@ class NlsExportPaneController {
     lateinit var tfOutputDirectory: TextField
     @FXML
     lateinit var btnSelectOutputDirectory: Button
-    @FXML
-    lateinit var cbUsingPathAsOutputName: CheckBox
 
     // 处理状态
     @FXML
@@ -99,7 +97,11 @@ class NlsExportPaneController {
                 val file = it.files[0]
                 if (file.isFile && file.extension.let { it == "xls" || it == "xlsx" }) {
                     tfExcelFile.text = file.absolutePath
-                    setOutputName(file)
+
+                    // 如果 output path 还未设置，此处自动设置
+                    if (tfOutputDirectory.text.isNullOrBlank()) {
+                        tfOutputDirectory.text = file.parentFile.absolutePath
+                    }
                 }
             }
         }
@@ -112,17 +114,21 @@ class NlsExportPaneController {
                 FileChooser.ExtensionFilter("XLS", "*.xls"),
                 FileChooser.ExtensionFilter("XLSX", "*.xlsx")
         )
-        val directory = fileChooser.showOpenDialog(btnSelectExcelFile.scene.window)
-        tfExcelFile.text = directory.absolutePath
-        setOutputName(directory)
+        val excelFile = fileChooser.showOpenDialog(btnSelectExcelFile.scene.window)
+        tfExcelFile.text = excelFile.absolutePath
+
+        // 如果 output path 还未设置，此处自动设置
+        if (tfOutputDirectory.text.isNullOrBlank()) {
+            tfOutputDirectory.text = excelFile.parentFile.absolutePath
+        }
     }
 
     fun onSelectOutputPathClicked() {
         val directoryChooser = DirectoryChooser()
         directoryChooser.title = "请选择导出文件夹"
+        directoryChooser.initialDirectory = tfExcelFile.text?.let { File(it) }?.parentFile
         val directory = directoryChooser.showDialog(btnSelectOutputDirectory.scene.window)
         tfOutputDirectory.text = directory.absolutePath
-        setOutputName(directory)
     }
 
     fun initVaribles(settingBean: SettingBean) {
@@ -141,11 +147,6 @@ class NlsExportPaneController {
 
         // 输出路径不允许编辑
         tfOutputDirectory.disableEdit()
-        cbUsingPathAsOutputName.selectedProperty().addListener { _, _, selected ->
-            if (selected) {
-                tfOutputDirectory.text = tfExcelFile.text?.takeIf { it.isNotEmpty() }?.let { File(it).parent }
-            }
-        }
 
         loadSettings(settingBean)
 
@@ -194,7 +195,6 @@ class NlsExportPaneController {
         }
         cbRemoveIllegalKeyLine.isSelected = settingBean.removeIllegalKeyLine
         cbTrimValue.isSelected = settingBean.trimValue
-        cbUsingPathAsOutputName.isSelected = settingBean.usingPathAsOutputName
     }
 
     /**
@@ -218,7 +218,6 @@ class NlsExportPaneController {
             }
         }
     }
-
 
     private fun updateBtnStatusFromOtherThread(text: String, disableBtn: Boolean = true) {
         Platform.runLater {
@@ -256,13 +255,6 @@ class NlsExportPaneController {
             Platform.runLater(logic)
         } else {
             logic.invoke()
-        }
-    }
-
-    private fun setOutputName(directoryFile: File) {
-        val name = directoryFile.parentFile.absolutePath
-        if (cbUsingPathAsOutputName.isSelected) {
-            tfOutputDirectory.text = name
         }
     }
 
@@ -323,7 +315,6 @@ class NlsExportPaneController {
         val tcColumnSetting = tcColumnNameSettingController.getNlsColumnInputBean()
         val removeIllegalKeyLine = cbRemoveIllegalKeyLine.isSelected
         val trimValue = cbTrimValue.isSelected
-        val usingPathAsOutputName = cbUsingPathAsOutputName.isSelected
 
         return SettingBean(
                 sheetSetting = sheetSetting,
@@ -333,8 +324,7 @@ class NlsExportPaneController {
                 scColumnSetting = scColumnSetting,
                 tcColumnSetting = tcColumnSetting,
                 removeIllegalKeyLine = removeIllegalKeyLine,
-                trimValue = trimValue,
-                usingPathAsOutputName = usingPathAsOutputName
+                trimValue = trimValue
         )
     }
 

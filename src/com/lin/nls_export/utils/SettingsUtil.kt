@@ -57,8 +57,7 @@ object SettingsUtil {
                 scColumnSetting = NlsColumnInputBean("Simple Chinese", true),
                 tcColumnSetting = NlsColumnInputBean("Tradional Chinese", true),
                 removeIllegalKeyLine = true,
-                trimValue = true,
-                usingPathAsOutputName = true
+                trimValue = true
         )
     }
 
