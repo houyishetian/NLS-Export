@@ -11,18 +11,19 @@ fun List<NlsItemBean>.exportNlsDoc(exportPath: String,
                                    exportEn: Boolean,
                                    exportSc: Boolean,
                                    exportTc: Boolean) {
-    // 至少要导出一项
-    if (listOf(exportKey, exportEn, exportSc, exportTc).contains(true)) {
-        val enFile = File(exportPath, "strings.xml")
-        val scFile = File(exportPath, "strings_CN.xml")
-        val tcFile = File(exportPath, "strings_TW.xml")
 
+    // 至少要导出一个key
+    if (listOf(exportKey, exportEn, exportSc, exportTc).contains(true)) {
+        val keyString = StringBuffer()
         val enString = StringBuffer()
         val scString = StringBuffer()
         val tcString = StringBuffer()
 
         this.forEach {
             val usedKey = if (exportKey) it.key else ""
+            if (exportKey) {
+                keyString.append("<string name=\"$usedKey\"></string>").append("\n")
+            }
             if (exportEn) {
                 enString.append("<string name=\"$usedKey\">${it.en}</string>").append("\n")
             }
@@ -33,9 +34,29 @@ fun List<NlsItemBean>.exportNlsDoc(exportPath: String,
                 tcString.append("<string name=\"$usedKey\">${it.tc}</string>").append("\n")
             }
         }
-        enFile.writeText(enString.toString())
-        scFile.writeText(scString.toString())
-        tcFile.writeText(tcString.toString())
+
+        if (exportKey && listOf(exportEn, exportSc, exportTc).contains(true).not()) {
+            // 如果只导出key，就需要生成一个 strings 文件即可
+            val enFile = File(exportPath, "strings.xml")
+            enFile.writeText(keyString.toString())
+        } else {
+            // 不然导出其他任何语言都有对应的文件
+            if (exportEn) {
+                // 如果没有读取到任何value，则会有一个空文件生成
+                val enFile = File(exportPath, "strings.xml")
+                enFile.writeText(enString.toString())
+            }
+            if (exportSc) {
+                // 如果没有读取到任何value，则会有一个空文件生成
+                val scFile = File(exportPath, "strings_CN.xml")
+                scFile.writeText(scString.toString())
+            }
+            if (exportTc) {
+                // 如果没有读取到任何value，则会有一个空文件生成
+                val tcFile = File(exportPath, "strings_TW.xml")
+                tcFile.writeText(tcString.toString())
+            }
+        }
     }
 }
 
@@ -80,20 +101,20 @@ fun List<NlsItemBean>.interceptorHandling(): List<NlsItemBean> {
 }
 
 fun main(args: Array<String>) {
-    val path = "C:\\Users\\lisonglin\\Desktop\\新建 Microsoft Excel 工作表.xlsx"
-    val filter = SheetNameFilter.ReadWhiteListFilter(listOf("Sheet1", "Sheet2"))
-    val keyColumn = "key"
-    val enColumn = "en"
-    val scColumn = "sc"
-    val tcColumn = "tc"
+    val path = "C:\\Users\\lisonglin\\Desktop\\新建文件夹 (2)\\新建 Microsoft Excel 工作表.xlsx"
+    val filter = SheetNameFilter.ReadWhiteListFilter(listOf("Sheet1"))
+    val keyColumn = "Key"
+    val enColumn = "English"
+    val scColumn = "Simple Chinese"
+    val tcColumn = "Tradional Chinese"
     val removeIllegalKeyColumns = true
     val trimAllValues = true
 
-    val exportPath = "C:\\Users\\lisonglin\\Desktop"
+    val exportPath = "C:\\Users\\lisonglin\\Desktop\\新建文件夹 (2)"
     val exportKey = true
-    val exportEn = true
-    val exportSc = true
-    val exportTc = true
+    val exportEn = false
+    val exportSc = false
+    val exportTc = false
 
     readFromExcel(path, filter, keyColumn, enColumn, scColumn, tcColumn)
             .removeIllegalKeyRows(removeIllegalKeyColumns)
