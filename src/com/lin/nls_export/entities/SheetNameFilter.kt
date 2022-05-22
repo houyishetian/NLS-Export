@@ -1,6 +1,14 @@
 package com.lin.nls_export.entities
 
 sealed class SheetNameFilter {
+
+    companion object {
+        fun getControlSheetList(controlSheetStr: String?): List<String> {
+            return controlSheetStr?.trim()?.takeIf { it.isNotBlank() }?.split("/")?.filter { it.isNotBlank() }
+                    ?: emptyList()
+        }
+    }
+
     // 读所有 sheet
     object ReadAllSheetFilter : SheetNameFilter()
 

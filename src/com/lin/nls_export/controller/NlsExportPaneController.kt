@@ -1,12 +1,11 @@
 package com.lin.nls_export.controller
 
 import com.lin.nls_export.entities.SettingBean
+import com.lin.nls_export.entities.SheetNameFilter
+import com.lin.nls_export.entrance.*
 import com.lin.nls_export.ext.disableEdit
 import com.lin.nls_export.ext.enableEdit
-import com.lin.nls_export.utils.AlertUtil
-import com.lin.nls_export.utils.SettingsUtil
-import com.lin.nls_export.utils.getAbsoluteX
-import com.lin.nls_export.utils.getAbsoluteY
+import com.lin.nls_export.utils.*
 import javafx.application.Platform
 import javafx.beans.value.ChangeListener
 import javafx.fxml.FXML
@@ -16,6 +15,7 @@ import javafx.scene.input.DragEvent
 import javafx.scene.input.TransferMode
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Pane
+import javafx.scene.paint.Color
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
 import java.io.File
@@ -125,25 +125,6 @@ class NlsExportPaneController {
         setOutputName(directory)
     }
 
-//    fun startMerge() {
-//        // reset status
-//        showSuccessMergeStatus("")
-//        try {
-//            val bean = ImageMergePropertiesBean.safeObject(
-//                    directoryPath = getDirectoryOfImages(),
-//                    imageFormats = getImageFormat(),
-//                    imageMargin = getImageMargin(),
-//                    eachLineNum = getEachLineNum(),
-//                    imageQuality = getMergeQuality(),
-//                    arrangeMode = getArrangeMode(),
-//                    outputName = getOutputName())
-//            mergeImage(bean)
-//        } catch (e: Exception) {
-//            e.printException()
-//            showFailedMergeStatus(e.message ?: "")
-//        }
-//    }
-
     fun initVaribles(settingBean: SettingBean) {
         tgSheetSetting = ToggleGroup()
         bindToggleGroupAndItsChildren(tgSheetSetting, rbSheetSetting0, rbSheetSetting1, rbSheetSetting2)
@@ -225,37 +206,6 @@ class NlsExportPaneController {
         }
     }
 
-    //
-//    /**
-//     * 设置 output name 和 checkbox 之间的绑定关系
-//     */
-//    private fun setOutputNameTextFieldListener(textChangeListener: ChangeListener<String>) {
-//        cbUsingPathAsOutputName.selectedProperty().addListener { _, _, isSelected ->
-//            setOutputNameProperties(isSelected, textChangeListener)
-//        }
-//    }
-//
-//    private fun setOutputNameProperties(isSelectedUsingPathAsOutputName: Boolean, textChangeListener: ChangeListener<String>) {
-//        // 如果选中了使用path作为输出文件名，则编辑框不可编辑
-//        if (isSelectedUsingPathAsOutputName) {
-//            // path 直接填充时，正则无效，以实际为准
-//            removeTextFieldListener(tfOutputName, textChangeListener)
-//            tfOutputName.isEditable = false
-//            tfOutputName.isMouseTransparent = true
-//            // 如果已经 selected，就读取path并显示
-//            tfOutputName.text = tfImageDirectory.text?.takeIf { it.isNotEmpty() }?.let { File(it).name }
-//            tfOutputName.promptText = "选择图片所在路径"
-//        } else {
-//            // user 自己填写时，需要符合正则
-//            bindTextFieldListener(tfOutputName, textChangeListener)
-//            // 恢复编辑状态
-//            tfOutputName.isEditable = true
-//            tfOutputName.isMouseTransparent = false
-//            tfOutputName.text = "" // 清空输入
-//            tfOutputName.promptText = "20位文件名，汉字数字字母下划线组成"
-//        }
-//    }
-//
     private fun createTextFieldListener(textField: TextInputControl, regex: String): ChangeListener<String> {
         return ChangeListener { _, old, new ->
             // 允许清空
@@ -269,145 +219,46 @@ class NlsExportPaneController {
         }
     }
 
-    //
-//    private fun bindTextFieldListener(textField: TextField, changeListener: ChangeListener<String>) {
-//        textField.textProperty().addListener(changeListener)
-//    }
-//
-//    private fun removeTextFieldListener(textField: TextField, changeListener: ChangeListener<String>) {
-//        textField.textProperty().removeListener(changeListener)
-//    }
-//
-//    /**
-//     * 获取user输入的文件夹
-//     */
-//    private fun getDirectoryOfImages(): String? {
-//        return tfImageDirectory.text?.takeIf { it.isNotEmpty() }
-//    }
-//
-//    /**
-//     * 获取 user 选择的图片格式
-//     */
-//    private fun getImageFormat(): List<String>? {
-//        return imageFormatCbList.map {
-//            imageFormatMap[it.takeIf { it.isSelected }?.run { it.text }]
-//        }.filterNotNull().takeIf { it.isNotEmpty() }
-//    }
-//
-//    /**
-//     * 获取 user 选择的图片间距
-//     */
-//    private fun getImageMargin(): Int? {
-//        val selectedOne = tgImageMargin.selectedToggle as? RadioButton
-//        return when (selectedOne) {
-//            rbImageMarginCustomize -> {
-//                tryCatchAllExceptions({ tfImageMarginCustomize.text?.toInt() })
-//            }
-//            else -> {
-//                imageMarginMap[selectedOne?.text]
-//            }
-//        }
-//    }
-//
-//    /**
-//     * 获取 user 选择的每行数量
-//     */
-//    private fun getEachLineNum(): Int? {
-//        val selectedOne = tgEachLine.selectedToggle as? RadioButton
-//        return when (selectedOne) {
-//            rbEachLineCustomize -> {
-//                tryCatchAllExceptions({ tfEachLineCustomize.text?.toInt() })
-//            }
-//            else -> {
-//                eachLineNumMap[selectedOne?.text]
-//            }
-//        }
-//    }
-//
-//    /**
-//     * 获取 user 选择的图片质量
-//     */
-//    private fun getMergeQuality(): Float? {
-//        return imageQualityMap[(tgImageQuality.selectedToggle as? RadioButton)?.text]
-//    }
-//
-//    private fun getArrangeMode(): MergeImageUtil.ArrangeMode? {
-//        return arrangeModeMap[(tgArrangeMode.selectedToggle as? RadioButton)?.text]
-//    }
-//
-//    /**
-//     * 获取 user 输入的 合并图片名
-//     */
-//    private fun getOutputName(): String? {
-//        return tfOutputName.text?.takeIf { it.isNotEmpty() }
-//    }
-//
-//    /**
-//     * 显示合并成功 status
-//     */
-//    private fun showSuccessMergeStatus(result: String, fromOtherThread: Boolean = false) {
-//        val logic = fun() {
-//            tfMergeStatus.textFill = Color.GREEN // 显示绿色
-//            tfMergeStatus.text = result
-//            tfMergeStatus.tooltip = Tooltip(result)
-//        }
-//        if (fromOtherThread) {
-//            Platform.runLater(logic)
-//        } else {
-//            logic.invoke()
-//        }
-//    }
-//
-//    private fun updateBtnStatusFromOtherThread(text: String, disableBtn: Boolean = true) {
-//        Platform.runLater {
-//            btnStartMerge.text = text
-//            btnStartMerge.isDisable = disableBtn
-//        }
-//    }
-//
-//    private fun updatePaneEvent(isDisabled: Boolean) {
-//        Platform.runLater {
-//            pane.isDisable = isDisabled
-//        }
-//    }
-//
-//    /**
-//     * 显示合并失败 status
-//     */
-//    private fun showFailedMergeStatus(errorStatus: String, fromOtherThread: Boolean = false) {
-//        val logic = fun() {
-//            tfMergeStatus.textFill = Color.RED // 显示红色
-//            tfMergeStatus.text = errorStatus
-//            tfMergeStatus.tooltip = Tooltip(errorStatus)
-//        }
-//        if (fromOtherThread) {
-//            Platform.runLater(logic)
-//        } else {
-//            logic.invoke()
-//        }
-//    }
-//
-//    private fun setDefaultSelectedItems(settingBean: SettingBean) {
-//        settingBean.imageFormatIndexes.mapNotNull { imageFormatCbList.getOrNull(it) }.forEach { it.isSelected = true }
-//
-//        imageMarginRbList.getOrNull(settingBean.imageMarginIndex)?.isSelected = true
-//        if (settingBean.imageMarginIndex == imageMarginRbList.size - 1) {
-//            tfImageMarginCustomize.text = settingBean.imageMarginValue?.toString() ?: ""
-//        }
-//
-//        eachLineRbList.getOrNull(settingBean.eachLineNumIndex)?.isSelected = true
-//        if (settingBean.eachLineNumIndex == eachLineRbList.size - 1) {
-//            tfEachLineCustomize.text = settingBean.eachLineNumValue?.toString() ?: ""
-//        }
-//
-//        imageQualityRbList.getOrNull(settingBean.mergeQualityIndex)?.isSelected = true
-//
-//        arrangeModeRbList.getOrNull(settingBean.arrangeModeIndex)?.isSelected = true
-//
-//        cbUsingPathAsOutputName.isSelected = settingBean.usingPathAsOutputName
-//        setOutputNameProperties(settingBean.usingPathAsOutputName, outputNameChangedListener)
-//    }
-//
+
+    private fun updateBtnStatusFromOtherThread(text: String, disableBtn: Boolean = true) {
+        Platform.runLater {
+            btnStartHandle.text = text
+            btnStartHandle.isDisable = disableBtn
+        }
+    }
+
+    private fun updatePaneEvent(isDisabled: Boolean) {
+        Platform.runLater {
+            pane.isDisable = isDisabled
+        }
+    }
+
+    private fun showSuccessStatus(result: String, fromOtherThread: Boolean = false) {
+        val logic = fun() {
+            tfHandleStatus.textFill = Color.GREEN // 显示绿色
+            tfHandleStatus.text = result
+            tfHandleStatus.tooltip = Tooltip(result)
+        }
+        if (fromOtherThread) {
+            Platform.runLater(logic)
+        } else {
+            logic.invoke()
+        }
+    }
+
+    private fun showFailedStatus(errorStatus: String, fromOtherThread: Boolean = false) {
+        val logic = fun() {
+            tfHandleStatus.textFill = Color.RED // 显示红色
+            tfHandleStatus.text = errorStatus
+            tfHandleStatus.tooltip = Tooltip(errorStatus)
+        }
+        if (fromOtherThread) {
+            Platform.runLater(logic)
+        } else {
+            logic.invoke()
+        }
+    }
+
     private fun setOutputName(directoryFile: File) {
         val name = directoryFile.parentFile.absolutePath
         if (cbUsingPathAsOutputName.isSelected) {
@@ -415,72 +266,6 @@ class NlsExportPaneController {
         }
     }
 
-    //
-//    private fun mergeImage(bean: ImageMergePropertiesBean) {
-//        val thread = Thread {
-//            try {
-//                updateBtnStatusFromOtherThread("正在合并...")
-//                showSuccessMergeStatus("正在合并...", true)
-//                updatePaneEvent(true)  // 禁止所有屏幕事件
-//                bean.run {
-//                    val startTime = System.currentTimeMillis()
-//
-//                    // 文件已存在
-//                    val desFile = File(File(directoryPath), "$outputName.png")
-//                    if (desFile.exists()) {
-//                        throw OutputFileAlreadyExistException(outputName)
-//                    }
-//
-//                    FileUtil.getAllPics(directoryPath, imageFormats).let {
-//                        val readImagesList = ImageCompressUtil.compress(it, imageQuality)
-//                        readImagesList?.filterNotNull()?.takeIf { it.isNotEmpty() }?.let {
-//                            // 将所有压缩后的额图片合并，间距 30px，每行最多5个
-//                            MergeImageUtil(imageFiles = it,
-//                                    columnCount = eachLineNum,
-//                                    marginPxBetweenImage = imageMargin,
-//                                    arrangeMode = arrangeMode).mergeImage()?.let {
-//                                // 写入
-//                                FileUtil.writeImageToFile(it, desFile.absolutePath)
-//                                val cost = System.currentTimeMillis() - startTime
-//                                val mill = cost % 1000
-//                                val second = cost / 1000
-//                                showSuccessMergeStatus("合并成功，检查:\n${desFile.absolutePath}\n耗时: $second.${mill}秒", fromOtherThread = true)
-//                                updateBtnStatusFromOtherThread("开始合并", false)
-//                                updatePaneEvent(false) // 恢复所有屏幕事件
-//                            }
-//                        } ?: let {
-//                            throw DirectoryIsEmptyException(directoryPath, imageFormats.toString())
-//                        }
-//                    }
-//                }
-//            } catch (e: OutputFileAlreadyExistException) {
-//                e.printException()
-//                showOutputFileAlreadyExist(e.message ?: "")
-//            } catch (e: Exception) {
-//                e.printException()
-//                showFailedMergeStatus(e.message ?: "", true)
-//                updateBtnStatusFromOtherThread("开始合并", false)
-//                updatePaneEvent(false) // 恢复所有屏幕事件
-//            }
-//        }
-//        thread.start()
-//    }
-//
-//    private fun showOutputFileAlreadyExist(message: String) {
-//        Platform.runLater {
-//            AlertUtil.newInstance(
-//                    alertType = Alert.AlertType.WARNING,
-//                    title = "文件已存在",
-//                    contentText = message,
-//                    onCloseRequest = EventHandler {
-//                        showFailedMergeStatus("合并取消!")
-//                        updateBtnStatusFromOtherThread("开始合并", false)
-//                        updatePaneEvent(false) // 恢复所有屏幕事件
-//                    }
-//            )
-//        }
-//    }
-//
     private fun initSettingMenu() {
         val saveItem = MenuItem("保存")
         val resetItem = MenuItem("重置")
@@ -551,5 +336,71 @@ class NlsExportPaneController {
                 trimValue = trimValue,
                 usingPathAsOutputName = usingPathAsOutputName
         )
+    }
+
+    fun onHandleBtnClicked() {
+        val excelPath = tfExcelFile.text
+        val filter = when (tgSheetSetting.selectedToggle) {
+            rbSheetSetting0 -> {
+                SheetNameFilter.ReadAllSheetFilter
+            }
+            rbSheetSetting1 -> {
+                SheetNameFilter.RemoveBlackListFilter(SheetNameFilter.getControlSheetList(taSheetName.text))
+            }
+            rbSheetSetting2 -> {
+                SheetNameFilter.ReadWhiteListFilter(SheetNameFilter.getControlSheetList(taSheetName.text))
+            }
+            else -> SheetNameFilter.ReadAllSheetFilter
+        }
+        val keyColumnSetting = keyColumnNameSettingController.getNlsColumnInputBean()
+        val enColumnSetting = enColumnNameSettingController.getNlsColumnInputBean()
+        val scColumnSetting = scColumnNameSettingController.getNlsColumnInputBean()
+        val tcColumnSetting = tcColumnNameSettingController.getNlsColumnInputBean()
+
+        val removeIllegalKeyColumns = cbRemoveIllegalKeyLine.isSelected
+        val trimAllValues = cbTrimValue.isSelected
+
+        val exportPath = tfOutputDirectory.text
+
+        showSuccessStatus("")
+
+        try {
+            validate(excelPath,
+                    filter,
+                    keyColumnSetting,
+                    enColumnSetting,
+                    scColumnSetting,
+                    tcColumnSetting,
+                    exportPath)
+
+            val thread = Thread {
+
+                val startTime = System.currentTimeMillis()
+
+                updateBtnStatusFromOtherThread("正在合并...")
+                showSuccessStatus("正在导出...", true)
+                updatePaneEvent(true)  // 禁止所有屏幕事件
+
+                val keyColumn = keyColumnSetting.takeIf { it.isRead }?.columnName
+                val enColumn = enColumnSetting.takeIf { it.isRead }?.columnName
+                val scColumn = scColumnSetting.takeIf { it.isRead }?.columnName
+                val tcColumn = tcColumnSetting.takeIf { it.isRead }?.columnName
+
+                // 开始处理
+                readFromExcel(excelPath, filter, keyColumn, enColumn, scColumn, tcColumn)
+                        .removeIllegalKeyRows(removeIllegalKeyColumns)
+                        .trim(trimAllValues)
+                        .interceptorHandling()
+                        .exportNlsDoc(exportPath, keyColumnSetting.isRead, enColumnSetting.isRead, scColumnSetting.isRead, tcColumnSetting.isRead)
+
+                val spendTime = System.currentTimeMillis() - startTime
+                showSuccessStatus("导出成功，检查:\n$exportPath 下的 strings.xml\n耗时: ${spendTime.toSecondString()}秒", fromOtherThread = true)
+                updateBtnStatusFromOtherThread("开始处理", false)
+                updatePaneEvent(false) // 恢复所有屏幕事件
+            }
+            thread.start()
+        } catch (e: Exception) {
+            showFailedStatus(e.message.orEmpty())
+        }
     }
 }

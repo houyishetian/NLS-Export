@@ -93,7 +93,7 @@
                     <RowConstraints maxHeight="29.0" minHeight="0.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
                 </rowConstraints>
                 <children>
-                    <RadioButton fx:id="rbSheetSetting0" mnemonicParsing="false" text="读取所有sheet" GridPane.columnIndex="0">
+                    <RadioButton fx:id="rbSheetSetting0" mnemonicParsing="false" selected="true" text="读取所有sheet" GridPane.columnIndex="0">
                         <font>
                             <Font size="13.0" />
                         </font>
@@ -203,7 +203,7 @@
 
     </HBox>
 
-    <Button fx:id="btnStartHandle" maxHeight="50.0" maxWidth="900.0" minHeight="50.0" minWidth="900.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="900.0" text="开始处理" VBox.vgrow="ALWAYS">
+    <Button fx:id="btnStartHandle" maxHeight="50.0" maxWidth="900.0" minHeight="50.0" minWidth="900.0" mnemonicParsing="false" onAction="#onHandleBtnClicked" prefHeight="50.0" prefWidth="900.0" text="开始处理" VBox.vgrow="ALWAYS">
         <font>
             <Font name="System Bold" size="16.0" />
         </font>
