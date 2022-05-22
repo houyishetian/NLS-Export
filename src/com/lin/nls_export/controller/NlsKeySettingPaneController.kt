@@ -10,13 +10,13 @@ import javafx.scene.control.TextField
 
 class NlsKeySettingPaneController {
     @FXML
-    lateinit var labelHandleName: Label // 需要控制的 label name
+    private lateinit var labelHandleName: Label // 需要控制的 label name
 
     @FXML
-    lateinit var cbIsRead: CheckBox // 是否读取的 checkbox
+    private lateinit var cbIsRead: CheckBox // 是否读取的 checkbox
 
     @FXML
-    lateinit var textFieldForColumnName: TextField // 该字段在 excel 中的名字
+    private lateinit var textFieldForColumnName: TextField // 该字段在 excel 中的名字
 
     fun showIsReadCheckbox(show: Boolean, selectedListener: ((Boolean) -> Unit)? = null) {
         cbIsRead.visibleProperty().value = show

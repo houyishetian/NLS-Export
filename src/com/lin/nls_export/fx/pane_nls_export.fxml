@@ -17,55 +17,60 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxWidth="900.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lin.nls_export.controller.NlsExportPaneController">
+<VBox maxWidth="900.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.121"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lin.nls_export.controller.NlsExportPaneController">
     <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
 
-        <VBox onDragDropped="#onPathSelectedDragDropped" onDragOver="#onPathSelectedDragOver" prefHeight="200.0" HBox.hgrow="ALWAYS">
+        <VBox onDragDropped="#onPathSelectedDragDropped" onDragOver="#onPathSelectedDragOver" prefHeight="200.0"
+              HBox.hgrow="ALWAYS">
 
             <Label text="请选择 Excel 文件:">
                 <font>
-                    <Font size="16.0" />
+                    <Font size="16.0"/>
                 </font>
             </Label>
 
             <HBox>
 
-                <TextField fx:id="tfExcelFile" editable="false" focusTraversable="false" mouseTransparent="true" promptText="输入路径" HBox.hgrow="ALWAYS">
+                <TextField fx:id="tfExcelFile" editable="false" focusTraversable="false" mouseTransparent="true"
+                           promptText="输入路径" HBox.hgrow="ALWAYS">
                     <font>
-                        <Font size="13.0" />
+                        <Font size="13.0"/>
                     </font>
                     <HBox.margin>
-                        <Insets />
+                        <Insets/>
                     </HBox.margin>
                 </TextField>
 
                 <Button fx:id="btnSelectExcelFile" onAction="#onSelectExcelClicked" text="浏览">
                     <font>
-                        <Font size="13.0" />
+                        <Font size="13.0"/>
                     </font>
                     <HBox.margin>
-                        <Insets left="15.0" />
+                        <Insets left="15.0"/>
                     </HBox.margin>
                 </Button>
                 <VBox.margin>
-                    <Insets top="15.0" />
+                    <Insets top="15.0"/>
                 </VBox.margin>
             </HBox>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: blue; -fx-border-width: 1.5; -fx-border-radius: 5;" VBox.vgrow="ALWAYS">
+            <BorderPane prefHeight="200.0" prefWidth="200.0"
+                        style="-fx-border-color: blue; -fx-border-width: 1.5; -fx-border-radius: 5;"
+                        VBox.vgrow="ALWAYS">
                 <VBox.margin>
-                    <Insets top="15.0" />
+                    <Insets top="15.0"/>
                 </VBox.margin>
                 <center>
                     <Label text="将 xls / xlsx 文件拖拽到此处" textFill="#c9c3c3" BorderPane.alignment="CENTER">
                         <font>
-                            <Font size="18.0" />
+                            <Font size="18.0"/>
                         </font>
                     </Label>
                 </center>
             </BorderPane>
 
             <padding>
-                <Insets bottom="20.0" left="20.0" right="10.0" top="20.0" />
+                <Insets bottom="20.0" left="20.0" right="10.0" top="20.0"/>
             </padding>
         </VBox>
         <VBox prefHeight="200.0" HBox.hgrow="ALWAYS">
@@ -73,139 +78,147 @@
                 <left>
                     <Label text="设置相关参数:" BorderPane.alignment="CENTER">
                         <font>
-                            <Font size="16.0" />
+                            <Font size="16.0"/>
                         </font>
                     </Label>
                 </left>
                 <right>
-                    <ImageView fx:id="ivSetting" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-                        <Image url="@/image/setting.png" />
+                    <ImageView fx:id="ivSetting" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true"
+                               preserveRatio="true" BorderPane.alignment="CENTER">
+                        <Image url="@/image/setting.png"/>
                     </ImageView>
                 </right>
             </BorderPane>
             <GridPane>
                 <columnConstraints>
-                    <ColumnConstraints hgrow="ALWAYS" maxWidth="172.0" minWidth="10.0" prefWidth="66.0" />
-                    <ColumnConstraints hgrow="ALWAYS" maxWidth="172.0" minWidth="10.0" prefWidth="66.0" />
-                    <ColumnConstraints hgrow="ALWAYS" maxWidth="172.0" minWidth="10.0" prefWidth="66.0" />
+                    <ColumnConstraints hgrow="ALWAYS" maxWidth="172.0" minWidth="10.0" prefWidth="66.0"/>
+                    <ColumnConstraints hgrow="ALWAYS" maxWidth="172.0" minWidth="10.0" prefWidth="66.0"/>
+                    <ColumnConstraints hgrow="ALWAYS" maxWidth="172.0" minWidth="10.0" prefWidth="66.0"/>
                 </columnConstraints>
                 <rowConstraints>
-                    <RowConstraints maxHeight="29.0" minHeight="0.0" prefHeight="15.0" valignment="TOP" vgrow="SOMETIMES" />
+                    <RowConstraints maxHeight="29.0" minHeight="0.0" prefHeight="15.0" valignment="TOP"
+                                    vgrow="SOMETIMES"/>
                 </rowConstraints>
-                <children>
-                    <RadioButton fx:id="rbSheetSetting0" mnemonicParsing="false" selected="true" text="读取所有sheet" GridPane.columnIndex="0">
-                        <font>
-                            <Font size="13.0" />
-                        </font>
-                    </RadioButton>
-                    <RadioButton fx:id="rbSheetSetting1" mnemonicParsing="false" text="不读取以下sheet" GridPane.columnIndex="1">
-                        <font>
-                            <Font size="13.0" />
-                        </font>
-                    </RadioButton>
-                    <RadioButton fx:id="rbSheetSetting2" mnemonicParsing="false" text="只读取以下sheet" GridPane.columnIndex="2">
-                        <font>
-                            <Font size="13.0" />
-                        </font>
-                    </RadioButton>
-                </children>
                 <VBox.margin>
-                    <Insets top="15.0" />
+                    <Insets top="15.0"/>
                 </VBox.margin>
+                <RadioButton fx:id="rbSheetSetting0" mnemonicParsing="false" selected="true" text="读取所有sheet"
+                             GridPane.columnIndex="0">
+                    <font>
+                        <Font size="13.0"/>
+                    </font>
+                </RadioButton>
+                <RadioButton fx:id="rbSheetSetting1" mnemonicParsing="false" text="不读取以下sheet" GridPane.columnIndex="1">
+                    <font>
+                        <Font size="13.0"/>
+                    </font>
+                </RadioButton>
+                <RadioButton fx:id="rbSheetSetting2" mnemonicParsing="false" text="只读取以下sheet" GridPane.columnIndex="2">
+                    <font>
+                        <Font size="13.0"/>
+                    </font>
+                </RadioButton>
             </GridPane>
-            <TextArea fx:id="taSheetName" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" prefWidth="200.0" promptText="输入需要控制的 sheet name，如果有多个，以 / 分隔；允许字符 [a-zA-Z0-9 _/]{0,30}" wrapText="true">
+            <TextArea fx:id="taSheetName" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" prefWidth="200.0"
+                      promptText="输入需要控制的 sheet name，如果有多个，以 / 分隔；允许字符 [a-zA-Z0-9 _/]{0,30}" wrapText="true">
                 <VBox.margin>
-                    <Insets top="10.0" />
+                    <Insets top="10.0"/>
                 </VBox.margin>
                 <font>
-                    <Font size="13.0" />
+                    <Font size="13.0"/>
                 </font>
             </TextArea>
-            <fx:include fx:id="keyColumnNameSetting" source="pane_nls_key_setting.fxml" />
-            <fx:include fx:id="enColumnNameSetting" source="pane_nls_key_setting.fxml" />
-            <fx:include fx:id="scColumnNameSetting" source="pane_nls_key_setting.fxml" />
-            <fx:include fx:id="tcColumnNameSetting" source="pane_nls_key_setting.fxml" />
-            <CheckBox fx:id="cbRemoveIllegalKeyLine" mnemonicParsing="false" text="过滤掉 Illegal Key 所在行 (比如 Empty/Blank)">
+            <fx:include fx:id="keyColumnNameSetting" source="pane_nls_key_setting.fxml"/>
+            <fx:include fx:id="enColumnNameSetting" source="pane_nls_key_setting.fxml"/>
+            <fx:include fx:id="scColumnNameSetting" source="pane_nls_key_setting.fxml"/>
+            <fx:include fx:id="tcColumnNameSetting" source="pane_nls_key_setting.fxml"/>
+            <CheckBox fx:id="cbRemoveIllegalKeyLine" mnemonicParsing="false"
+                      text="过滤掉 Illegal Key 所在行 (比如 Empty/Blank)">
                 <VBox.margin>
-                    <Insets top="15.0" />
+                    <Insets top="15.0"/>
                 </VBox.margin>
                 <font>
-                    <Font size="13.0" />
+                    <Font size="13.0"/>
                 </font>
             </CheckBox>
             <CheckBox fx:id="cbTrimValue" mnemonicParsing="false" text="对 value 做 trim 处理">
                 <VBox.margin>
-                    <Insets top="15.0" />
+                    <Insets top="15.0"/>
                 </VBox.margin>
                 <font>
-                    <Font size="13.0" />
+                    <Font size="13.0"/>
                 </font>
             </CheckBox>
-         <CheckBox fx:id="cbAutoCoverExistingFiles" mnemonicParsing="false" text="自动覆盖上次导出的文件">
-            <VBox.margin>
-               <Insets top="15.0" />
-            </VBox.margin>
-            <font>
-               <Font size="13.0" />
-            </font>
-         </CheckBox>
+            <CheckBox fx:id="cbAutoCoverExistingFiles" mnemonicParsing="false" text="自动覆盖上次导出的文件">
+                <VBox.margin>
+                    <Insets top="15.0"/>
+                </VBox.margin>
+                <font>
+                    <Font size="13.0"/>
+                </font>
+            </CheckBox>
             <HBox alignment="CENTER_LEFT" prefWidth="200.0">
                 <VBox.margin>
-                    <Insets top="15.0" />
+                    <Insets top="15.0"/>
                 </VBox.margin>
                 <Label prefWidth="60.0" text="输出路径:">
                     <font>
-                        <Font name="System Bold" size="13.0" />
+                        <Font name="System Bold" size="13.0"/>
                     </font>
                 </Label>
-                <TextField fx:id="tfOutputDirectory" editable="false" focusTraversable="false" mouseTransparent="true" promptText="20位文件名，汉字数字字母下划线组成" HBox.hgrow="ALWAYS">
+                <TextField fx:id="tfOutputDirectory" editable="false" focusTraversable="false" mouseTransparent="true"
+                           promptText="20位文件名，汉字数字字母下划线组成" HBox.hgrow="ALWAYS">
                     <font>
-                        <Font size="13.0" />
+                        <Font size="13.0"/>
                     </font>
                     <HBox.margin>
-                        <Insets left="10.0" />
+                        <Insets left="10.0"/>
                     </HBox.margin>
                 </TextField>
-                <Button fx:id="btnSelectOutputDirectory" mnemonicParsing="false" onAction="#onSelectOutputPathClicked" text="浏览">
+                <Button fx:id="btnSelectOutputDirectory" mnemonicParsing="false" onAction="#onSelectOutputPathClicked"
+                        text="浏览">
                     <HBox.margin>
-                        <Insets left="20.0" />
+                        <Insets left="20.0"/>
                     </HBox.margin>
                     <font>
-                        <Font size="13.0" />
+                        <Font size="13.0"/>
                     </font>
                 </Button>
             </HBox>
             <HBox maxHeight="80.0" minHeight="80.0" prefHeight="80.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                 <VBox.margin>
-                    <Insets top="15.0" />
+                    <Insets top="15.0"/>
                 </VBox.margin>
                 <Label minWidth="60.0" prefWidth="60.0" text="合并状态:">
                     <font>
-                        <Font name="System Bold" size="13.0" />
+                        <Font name="System Bold" size="13.0"/>
                     </font>
                 </Label>
-                <Label fx:id="tfHandleStatus" alignment="TOP_LEFT" contentDisplay="TOP" ellipsisString="...&lt;更多&gt;" graphicTextGap="0.0" text="未开始" textOverrun="WORD_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
+                <Label fx:id="tfHandleStatus" alignment="TOP_LEFT" contentDisplay="TOP" ellipsisString="...&lt;更多&gt;"
+                       graphicTextGap="0.0" text="未开始" textOverrun="WORD_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                     <font>
-                        <Font size="13.0" />
+                        <Font size="13.0"/>
                     </font>
                     <HBox.margin>
-                        <Insets left="10.0" />
+                        <Insets left="10.0"/>
                     </HBox.margin>
                 </Label>
                 <opaqueInsets>
-                    <Insets />
+                    <Insets/>
                 </opaqueInsets>
             </HBox>
             <padding>
-                <Insets bottom="20.0" left="10.0" right="20.0" top="20.0" />
+                <Insets bottom="20.0" left="10.0" right="20.0" top="20.0"/>
             </padding>
         </VBox>
 
     </HBox>
 
-    <Button fx:id="btnStartHandle" maxHeight="50.0" maxWidth="900.0" minHeight="50.0" minWidth="900.0" mnemonicParsing="false" onAction="#onHandleBtnClicked" prefHeight="50.0" prefWidth="900.0" text="开始处理" VBox.vgrow="ALWAYS">
+    <Button fx:id="btnStartHandle" maxHeight="50.0" maxWidth="900.0" minHeight="50.0" minWidth="900.0"
+            mnemonicParsing="false" onAction="#onHandleBtnClicked" prefHeight="50.0" prefWidth="900.0" text="开始处理"
+            VBox.vgrow="ALWAYS">
         <font>
-            <Font name="System Bold" size="16.0" />
+            <Font name="System Bold" size="16.0"/>
         </font>
     </Button>
 </VBox>

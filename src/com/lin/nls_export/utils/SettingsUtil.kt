@@ -55,7 +55,7 @@ object SettingsUtil {
                 keyColumnSetting = NlsColumnInputBean("Key", true),
                 enColumnSetting = NlsColumnInputBean("English", true),
                 scColumnSetting = NlsColumnInputBean("Simple Chinese", true),
-                tcColumnSetting = NlsColumnInputBean("Tradional Chinese", true),
+                tcColumnSetting = NlsColumnInputBean("Traditional Chinese", true),
                 removeIllegalKeyLine = true,
                 trimValue = true,
                 autoCoverExistingFiles = true

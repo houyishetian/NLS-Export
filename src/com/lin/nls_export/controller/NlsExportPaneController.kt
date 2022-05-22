@@ -13,7 +13,6 @@ import javafx.scene.control.*
 import javafx.scene.image.ImageView
 import javafx.scene.input.DragEvent
 import javafx.scene.input.TransferMode
-import javafx.scene.layout.HBox
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.stage.DirectoryChooser
@@ -24,60 +23,61 @@ class NlsExportPaneController {
 
     // 路径选择的 view
     @FXML
-    lateinit var tfExcelFile: TextField // 路径显示文本
+    private lateinit var tfExcelFile: TextField // 路径显示文本
     @FXML
-    lateinit var btnSelectExcelFile: Button // 路径选择文本
+    private lateinit var btnSelectExcelFile: Button // 路径选择文本
 
     @FXML
-    lateinit var ivSetting: ImageView
+    private lateinit var ivSetting: ImageView
 
     // sheet 设置的各项 radioButton
     @FXML
-    lateinit var rbSheetSetting0: RadioButton
+    private lateinit var rbSheetSetting0: RadioButton
     @FXML
-    lateinit var rbSheetSetting1: RadioButton
+    private lateinit var rbSheetSetting1: RadioButton
     @FXML
-    lateinit var rbSheetSetting2: RadioButton
+    private lateinit var rbSheetSetting2: RadioButton
     private lateinit var tgSheetSetting: ToggleGroup
     private lateinit var allSheetSettingRadioBtns: List<RadioButton>
     @FXML
-    lateinit var taSheetName: TextArea
+    private lateinit var taSheetName: TextArea
     private val taSheetNameChangedListener: ChangeListener<String> by lazy {
         createTextFieldListener(taSheetName, "[a-zA-Z0-9 _/]{0,30}")
     }
 
     // key/en/sc/tc 的相关设置
     @FXML
-    lateinit var keyColumnNameSettingController: NlsKeySettingPaneController
+    private lateinit var keyColumnNameSettingController: NlsKeySettingPaneController
     @FXML
-    lateinit var enColumnNameSettingController: NlsKeySettingPaneController
+    private lateinit var enColumnNameSettingController: NlsKeySettingPaneController
     @FXML
-    lateinit var scColumnNameSettingController: NlsKeySettingPaneController
+    private lateinit var scColumnNameSettingController: NlsKeySettingPaneController
     @FXML
-    lateinit var tcColumnNameSettingController: NlsKeySettingPaneController
+    private lateinit var tcColumnNameSettingController: NlsKeySettingPaneController
 
     // 设置过滤或处理项
     @FXML
-    lateinit var cbRemoveIllegalKeyLine: CheckBox
+    private lateinit var cbRemoveIllegalKeyLine: CheckBox
 
     @FXML
-    lateinit var cbTrimValue: CheckBox
+    private lateinit var cbTrimValue: CheckBox
 
     @FXML
-    lateinit var cbAutoCoverExistingFiles: CheckBox
+    private lateinit var cbAutoCoverExistingFiles: CheckBox
 
     // 输出设置
     @FXML
-    lateinit var tfOutputDirectory: TextField
+    private lateinit var tfOutputDirectory: TextField
     @FXML
-    lateinit var btnSelectOutputDirectory: Button
+    private lateinit var btnSelectOutputDirectory: Button
 
     // 处理状态
     @FXML
-    lateinit var tfHandleStatus: Label
+    private lateinit var tfHandleStatus: Label
 
     // 开始合并按钮
-    lateinit var btnStartHandle: Button
+    @FXML
+    private lateinit var btnStartHandle: Button
 
     // 整个 pane 对象，用来做 disable
     lateinit var pane: Pane
@@ -138,7 +138,7 @@ class NlsExportPaneController {
         tfOutputDirectory.text = directory.absolutePath
     }
 
-    fun initVaribles(settingBean: SettingBean) {
+    fun initVariables(settingBean: SettingBean) {
         tgSheetSetting = ToggleGroup()
         bindToggleGroupAndItsChildren(tgSheetSetting, rbSheetSetting0, rbSheetSetting1, rbSheetSetting2)
         allSheetSettingRadioBtns = listOf(rbSheetSetting0, rbSheetSetting1, rbSheetSetting2)

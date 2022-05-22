@@ -32,7 +32,7 @@ class FXEntrance : Application() {
 
             controller.pane = pane
             // 设置默认值，如果有以前保存的，取出；如果没有，使用默认值
-            controller.initVaribles(SettingsUtil.getSetting() ?: SettingsUtil.getDefaultSetting())
+            controller.initVariables(SettingsUtil.getSetting() ?: SettingsUtil.getDefaultSetting())
 
             val scene = Scene(pane, screenWidth, screenHeight)
 
