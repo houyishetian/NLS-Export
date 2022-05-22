@@ -87,10 +87,16 @@ class NlsExportPaneController {
     // 整个 pane 对象，用来做 disable
     lateinit var pane: Pane
 
+    /**
+     * 接收任意类型的拖动
+     */
     fun onPathSelectedDragOver(dragEvent: DragEvent) {
         dragEvent.acceptTransferModes(*TransferMode.ANY)
     }
 
+    /**
+     * 处理拖动结束后的逻辑
+     */
     fun onPathSelectedDragDropped(dragEvent: DragEvent) {
         dragEvent.dragboard.let {
             if (it.hasFiles()) {
@@ -107,6 +113,9 @@ class NlsExportPaneController {
         }
     }
 
+    /**
+     * 用户自主选择 excel 文件
+     */
     fun onSelectExcelClicked() {
         val fileChooser = FileChooser()
         fileChooser.title = "请选择 Excel 文件"
@@ -123,6 +132,9 @@ class NlsExportPaneController {
         }
     }
 
+    /**
+     * 用户自主选择输出路径
+     */
     fun onSelectOutputPathClicked() {
         val directoryChooser = DirectoryChooser()
         directoryChooser.title = "请选择导出文件夹"
@@ -153,6 +165,9 @@ class NlsExportPaneController {
         initSettingMenu()
     }
 
+    /**
+     * 加载已有的配置信息
+     */
     private fun loadSettings(settingBean: SettingBean) {
         allSheetSettingRadioBtns.getOrNull(settingBean.sheetSetting)?.isSelected = true
         taSheetName.text = settingBean.sheetControlInput
@@ -206,6 +221,9 @@ class NlsExportPaneController {
         }
     }
 
+    /**
+     * 根据 regex 创建输入监听
+     */
     private fun createTextFieldListener(textField: TextInputControl, regex: String): ChangeListener<String> {
         return ChangeListener { _, old, new ->
             // 允许清空
@@ -219,6 +237,9 @@ class NlsExportPaneController {
         }
     }
 
+    /**
+     * 更改 btn text 以及 enable 属性
+     */
     private fun updateBtnStatusFromOtherThread(text: String, disableBtn: Boolean = true) {
         Platform.runLater {
             btnStartHandle.text = text
@@ -226,6 +247,9 @@ class NlsExportPaneController {
         }
     }
 
+    /**
+     * 更改整个 pane 的 enable 属性
+     */
     private fun updatePaneEvent(isDisabled: Boolean) {
         Platform.runLater {
             pane.isDisable = isDisabled
@@ -328,6 +352,9 @@ class NlsExportPaneController {
         )
     }
 
+    /**
+     * 开始处理按钮点击事件
+     */
     fun onHandleBtnClicked() {
         val excelPath = tfExcelFile.text
         val filter = when (tgSheetSetting.selectedToggle) {
