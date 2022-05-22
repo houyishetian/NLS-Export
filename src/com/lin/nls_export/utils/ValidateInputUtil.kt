@@ -29,6 +29,9 @@ fun validate(excelPath: String?,
     if (tcColumnSetting.let { it.isRead && it.columnName.isBlank() }) {
         throw IllegalArgumentException("请输入繁体中文所在列名")
     }
+    if(listOf(keyColumnSetting, enColumnSetting,scColumnSetting, tcColumnSetting).find { it.isRead } == null){
+        throw IllegalArgumentException("请重新选择读取项，至少需要读取 \"Key/英文/简体中文/繁体中文\" 中的一项")
+    }
     if (exportPath.isNullOrBlank()) {
         throw IllegalArgumentException("请选择输出路径")
     }
