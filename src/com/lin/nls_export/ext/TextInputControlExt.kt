@@ -11,3 +11,7 @@ fun TextInputControl.enableEdit() {
     isEditable = true
     isMouseTransparent = false
 }
+
+fun TextInputControl.enableEdit(enable: Boolean) {
+    if (enable) enableEdit() else disableEdit()
+}

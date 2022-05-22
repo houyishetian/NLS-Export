@@ -147,13 +147,10 @@ class NlsExportPaneController {
         tgSheetSetting = ToggleGroup()
         bindToggleGroupAndItsChildren(tgSheetSetting, rbSheetSetting0, rbSheetSetting1, rbSheetSetting2)
         allSheetSettingRadioBtns = listOf(rbSheetSetting0, rbSheetSetting1, rbSheetSetting2)
+
         // 读取所有 sheet 时不需要输入
         rbSheetSetting0.selectedProperty().addListener { _, _, selected ->
-            if (selected) {
-                taSheetName.enableEdit()
-            } else {
-                taSheetName.disableEdit()
-            }
+            taSheetName.enableEdit(!selected)
         }
         taSheetName.textProperty().addListener(taSheetNameChangedListener)
 
@@ -170,6 +167,7 @@ class NlsExportPaneController {
      */
     private fun loadSettings(settingBean: SettingBean) {
         allSheetSettingRadioBtns.getOrNull(settingBean.sheetSetting)?.isSelected = true
+        taSheetName.enableEdit(tgSheetSetting.selectedToggle != rbSheetSetting0)
         taSheetName.text = settingBean.sheetControlInput
         settingBean.keyColumnSetting.run {
             keyColumnNameSettingController.let {
