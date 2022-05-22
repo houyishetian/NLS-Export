@@ -71,6 +71,9 @@ class NlsExportPaneController {
     @FXML
     lateinit var cbTrimValue: CheckBox
 
+    @FXML
+    lateinit var cbAutoCoverExistingFiles: CheckBox
+
     // 输出设置
     @FXML
     lateinit var tfOutputDirectory: TextField
@@ -208,6 +211,7 @@ class NlsExportPaneController {
         }
         cbRemoveIllegalKeyLine.isSelected = settingBean.removeIllegalKeyLine
         cbTrimValue.isSelected = settingBean.trimValue
+        cbAutoCoverExistingFiles.isSelected = settingBean.autoCoverExistingFiles
     }
 
     /**
@@ -337,6 +341,7 @@ class NlsExportPaneController {
         val tcColumnSetting = tcColumnNameSettingController.getNlsColumnInputBean()
         val removeIllegalKeyLine = cbRemoveIllegalKeyLine.isSelected
         val trimValue = cbTrimValue.isSelected
+        val autoCoverExistingFiles = cbAutoCoverExistingFiles.isSelected
 
         return SettingBean(
                 sheetSetting = sheetSetting,
@@ -346,7 +351,8 @@ class NlsExportPaneController {
                 scColumnSetting = scColumnSetting,
                 tcColumnSetting = tcColumnSetting,
                 removeIllegalKeyLine = removeIllegalKeyLine,
-                trimValue = trimValue
+                trimValue = trimValue,
+                autoCoverExistingFiles = autoCoverExistingFiles
         )
     }
 
@@ -374,18 +380,21 @@ class NlsExportPaneController {
 
         val removeIllegalKeyColumns = cbRemoveIllegalKeyLine.isSelected
         val trimAllValues = cbTrimValue.isSelected
+        val autoCoverExistingFiles = cbAutoCoverExistingFiles.isSelected
 
         val exportPath = tfOutputDirectory.text
 
         showSuccessStatus("")
 
         try {
+            // 校验字段
             validate(excelPath,
                     filter,
                     keyColumnSetting,
                     enColumnSetting,
                     scColumnSetting,
                     tcColumnSetting,
+                    autoCoverExistingFiles,
                     exportPath)
 
             val thread = Thread {

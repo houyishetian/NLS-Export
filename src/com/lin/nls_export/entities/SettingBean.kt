@@ -10,7 +10,8 @@ class SettingBean(
         val scColumnSetting: NlsColumnInputBean,
         val tcColumnSetting: NlsColumnInputBean,
         val removeIllegalKeyLine: Boolean,
-        val trimValue: Boolean
+        val trimValue: Boolean,
+        val autoCoverExistingFiles: Boolean
 ) : Serializable
 
 class NlsColumnInputBean(

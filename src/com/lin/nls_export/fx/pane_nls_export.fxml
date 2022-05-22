@@ -141,6 +141,14 @@
                     <Font size="13.0" />
                 </font>
             </CheckBox>
+         <CheckBox fx:id="cbAutoCoverExistingFiles" mnemonicParsing="false" text="自动覆盖上次导出的文件">
+            <VBox.margin>
+               <Insets top="15.0" />
+            </VBox.margin>
+            <font>
+               <Font size="13.0" />
+            </font>
+         </CheckBox>
             <HBox alignment="CENTER_LEFT" prefWidth="200.0">
                 <VBox.margin>
                     <Insets top="15.0" />
