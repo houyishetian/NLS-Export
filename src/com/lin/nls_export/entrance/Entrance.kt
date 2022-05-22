@@ -125,7 +125,7 @@ fun main(args: Array<String>) {
     val exportTc = false
 
     readFromExcel(path, filter, keyColumn, enColumn, scColumn, tcColumn)
-            .removeIllegalKeyRows(removeIllegalKeyColumns)
+            .removeIllegalKeyRows(exportKey && removeIllegalKeyColumns)
             .trim(trimAllValues)
             .interceptorHandling()
             .exportNlsDoc(exportPath, exportKey, exportEn, exportSc, exportTc)

@@ -48,14 +48,6 @@ class NlsExportPaneController {
 
     // key/en/sc/tc 的相关设置
     @FXML
-    lateinit var keyColumnNameSetting: HBox
-    @FXML
-    lateinit var enColumnNameSetting: HBox
-    @FXML
-    lateinit var scColumnNameSetting: HBox
-    @FXML
-    lateinit var tcColumnNameSetting: HBox
-    @FXML
     lateinit var keyColumnNameSettingController: NlsKeySettingPaneController
     @FXML
     lateinit var enColumnNameSettingController: NlsKeySettingPaneController
@@ -177,7 +169,10 @@ class NlsExportPaneController {
                 it.setLabel("Key:")
                 it.setInputHint("请输入Key所在列名")
                 it.setInputColumnName(columnName)
-                it.showIsReadCheckbox(true)
+                it.showIsReadCheckbox(true){
+                    // 如果 key 不需要读，则下方的 移除非法key的行没有意义，需要 disabled
+                    cbRemoveIllegalKeyLine.disableProperty().set(!it)
+                }
                 it.isReadCheckBox(isRead)
             }
         }
@@ -210,6 +205,8 @@ class NlsExportPaneController {
             }
         }
         cbRemoveIllegalKeyLine.isSelected = settingBean.removeIllegalKeyLine
+        // 如果 key 不需要读，则下方的 移除非法key的行没有意义，需要 disabled
+        cbRemoveIllegalKeyLine.disableProperty().set(!settingBean.keyColumnSetting.isRead)
         cbTrimValue.isSelected = settingBean.trimValue
         cbAutoCoverExistingFiles.isSelected = settingBean.autoCoverExistingFiles
     }
@@ -412,7 +409,7 @@ class NlsExportPaneController {
 
                 // 开始处理
                 readFromExcel(excelPath, filter, keyColumn, enColumn, scColumn, tcColumn)
-                        .removeIllegalKeyRows(removeIllegalKeyColumns)
+                        .removeIllegalKeyRows(keyColumnSetting.isRead && removeIllegalKeyColumns) // 只有读取 key，才有必要移除空行
                         .trim(trimAllValues)
                         .interceptorHandling()
                         .exportNlsDoc(exportPath, keyColumnSetting.isRead, enColumnSetting.isRead, scColumnSetting.isRead, tcColumnSetting.isRead)

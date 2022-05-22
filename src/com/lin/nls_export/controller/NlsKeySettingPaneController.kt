@@ -18,7 +18,7 @@ class NlsKeySettingPaneController {
     @FXML
     lateinit var textFieldForColumnName: TextField // 该字段在 excel 中的名字
 
-    fun showIsReadCheckbox(show: Boolean) {
+    fun showIsReadCheckbox(show: Boolean, selectedListener: ((Boolean) -> Unit)? = null) {
         cbIsRead.visibleProperty().value = show
 
         if (show) {
@@ -28,6 +28,7 @@ class NlsKeySettingPaneController {
                 } else {
                     textFieldForColumnName.disableEdit()
                 }
+                selectedListener?.invoke(isSelected)
             }
         }
     }
